@@ -2,13 +2,37 @@
 
 {% block content %}
 
-    <h1>{{ site.name }}</h1>
+    <div class="jumbotron">
+        <h1>{{ site.name }}</h1>
+        <h3>{{ site.stp }}</h3>
+    </div>
 
-    {% for beds in site.beds_set.all %}
-        {% if forloop.first %}
-            {% else %}
+    {# Beds Data #}
+    <div class="container">
+        <h3>Bed Data</h3>
+        {% for beds in site.beds_set.all %}
             {{ beds.year }}: {{ beds.general }}<br>
-        {% endif %}
-    {% endfor %}
+        {% endfor %}
+    </div>
+
+    {# Income Data #}
+    <div class="container">
+        <h3>Income Data</h3>
+        {% for income in site.income_set.all %}
+            {% if forloop.first %}
+                <p>Last year their total income was: <b>{{ income.income }}M</b></p>
+            {% else %}
+                {{ income.year }}: {{ income.income }}M<br>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    {# Sub Site Data #}
+    <div class="container">
+        <h3>Site Details</h3>
+        {% for subsite in site.subsite_set.all %}
+            {{ subsite.name }}{% if subsite.main_location %}- Main Location{% endif %}<br>
+        {% endfor %}
+    </div>
 
 {% endblock %}

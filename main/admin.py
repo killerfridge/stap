@@ -1,5 +1,12 @@
 from django.contrib import admin
-from .models import Site, STP, Beds, Income, Year
+from .models import (
+    Site,
+    STP,
+    Beds,
+    Income,
+    Year,
+    SubSite,
+)
 # Register your models here.
 
 
@@ -19,12 +26,30 @@ class SiteInline(admin.TabularInline):
     fields = ['name', 'nhs_code', 'postcode']
 
 
+class SubSiteInline(admin.TabularInline):
+    model = SubSite
+    extra = 0
+    fields = ['name', 'nhs_code', 'postcode']
+
+
 @admin.register(Site)
 class SiteAdmin(admin.ModelAdmin):
-    inlines = [BedInline, IncomeInline]
+    inlines = [BedInline, IncomeInline, SubSiteInline]
     fieldsets = (
         (None, {
             'fields': ('name', 'nhs_code', 'stp', 'website')
+        }),
+        ('Address', {
+            'fields': ('street_address_1', 'street_address_2', 'city', 'county', 'postcode')
+        })
+    )
+
+
+@admin.register(SubSite)
+class SubSiteAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'main_location', 'nhs_code', 'site', 'website')
         }),
         ('Address', {
             'fields': ('street_address_1', 'street_address_2', 'city', 'county', 'postcode')
