@@ -1,0 +1,9 @@
+{% extends 'components/base.html' %}
+
+{% block content %}
+
+    {% for site in site_list %}
+        <a href="{{ site.get_absolute_url }}">{{ site.name }}</a>
+    {% endfor %}
+
+{% endblock %}

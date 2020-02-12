@@ -1,0 +1,14 @@
+{% extends 'components/base.html' %}
+
+{% block content %}
+
+    {% for stp in stp_list %}
+        <a href="{{ stp.get_absolute_url }}"><h5>{{ stp.name }}</h5></a>
+        <ul>
+            {% for site in stp.site_set.all %}
+                <li><a href="{{ site.get_absolute_url }}">{{ site.name }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+
+{% endblock %}

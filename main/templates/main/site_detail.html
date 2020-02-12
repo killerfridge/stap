@@ -1,0 +1,14 @@
+{% extends 'components/base.html' %}
+
+{% block content %}
+
+    <h1>{{ site.name }}</h1>
+
+    {% for beds in site.beds_set.all %}
+        {% if forloop.first %}
+            {% else %}
+            {{ beds.year }}: {{ beds.general }}<br>
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
