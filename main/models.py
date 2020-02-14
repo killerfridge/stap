@@ -105,5 +105,14 @@ class Income(models.Model):
 
 
 class Leader(models.Model):
-    pass
+    first = models.CharField(max_length=20)
+    last = models.CharField(max_length=20)
+    nhs_code = models.ForeignKey(Site, on_delete=models.CASCADE)
+    title = models.CharField(max_length=5)
+    position = models.ForeignKey('Position', on_delete=models.CASCADE)
+
+
+class Position(models.Model):
+    c_suite = models.BooleanField(default=False)
+    name = models.CharField(max_length=20)
 # TODO CQC model
