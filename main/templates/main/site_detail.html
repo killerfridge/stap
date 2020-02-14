@@ -1,38 +1,125 @@
 {% extends 'components/base.html' %}
 
+{% load static %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'main/style.css' %}">
+{% endblock %}
 {% block content %}
 
-    <div class="jumbotron">
+    <div class="col-10 md-5 mx-auto my-5 text-center">
         <h1>{{ site.name }}</h1>
         <h3>{{ site.stp }}</h3>
     </div>
 
-    {# Beds Data #}
-    <div class="container">
-        <h3>Bed Data</h3>
-        {% for beds in site.beds_set.all %}
-            {{ beds.year }}: {{ beds.general }}<br>
-        {% endfor %}
+    {# Map and address #}
+    <div class="container card py-3 my-5">
+        <div class="row">
+            <div class="col-8">
+                Map Goes here
+            </div>
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-header">
+                        {% if site.street_address_1 %}{{ site.street_address_1 }}<br>{% endif %}
+                    </div>
+                    <div class="card-body">
+                        {% if site.street_address_2 %}{{ site.street_address_2 }}<br>{% endif %}
+                        {% if site.city %}{{ site.city }}<br>{% endif %}
+                        {% if site.county %}{{ site.county }}<br>{% endif %}
+                        {% if site.postcode %}{{ site.postcode }}<br>{% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    {# Income Data #}
     <div class="container">
-        <h3>Income Data</h3>
-        {% for income in site.income_set.all %}
-            {% if forloop.first %}
-                <p>Last year their total income was: <b>{{ income.income }}M</b></p>
-            {% else %}
-                {{ income.year }}: {{ income.income }}M<br>
-            {% endif %}
-        {% endfor %}
-    </div>
+        <div class="row">
+            {# Left column #}
+            <div class="col-8">
 
-    {# Sub Site Data #}
-    <div class="container">
-        <h3>Site Details</h3>
-        {% for subsite in site.subsite_set.all %}
-            {{ subsite.name }}{% if subsite.main_location %}- Main Location{% endif %}<br>
-        {% endfor %}
+            {# Income Data #}
+                <button class="btn full btn-primary btn-block full mb-1" data-toggle="collapse" data-target="#collapseFinance"
+                        type="button" aria-expanded="false" aria-controls="collapseFinance">Trust Finances</button>
+                <div class="collapse table-responsive" id="collapseFinance">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Type</th>
+                                    {% for year in income_years %}
+                                        <th scope="col">{{ year }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Income</th>
+                                    {% for income in site.income_set.all %}
+                                        <td>{{ income.income }}</td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    <th scope="row">Surplus/Defecit</th>
+                                    {% for income in site.income_set.all %}
+                                        <td>{{ income.forecast_surplus }}</td>
+                                    {% endfor %}
+                                </tr>
+                            </tbody>
+                        </table>
+                </div>
+
+            {# Beds Data #}
+            <button class="btn btn-primary btn-block full mb-1" data-toggle="collapse" data-target="#collapseBeds"
+                    type="button" aria-expanded="false" aria-controls="collapseBeds">Beds Data</button>
+                <div class="collapse table-responsive" id="collapseBeds">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Type</th>
+                                    {% for year in bed_years %}
+                                        <th scope="col">{{ year }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">General Care</th>
+                                    {% for beds in site.beds_set.all %}
+                                        <td>{{ beds.general }}</td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    <th scope="row">Critical Care</th>
+                                    {% for beds in site.beds_set.all %}
+                                        <td>{{ income.critical }}</td>
+                                    {% endfor %}
+                                </tr>
+                            </tbody>
+                        </table>
+                </div>
+
+            {# Workforce Data #}
+
+
+            {# Sub Site Data #}
+                <button class="btn btn-secondary btn-block full mb-1" data-toggle="collapse" data-target="#collapseSites"
+                type="button" aria-expanded="false" aria-controls="collapseSites">Site Details</button>
+                <div class="collapse" id="collapseSites">
+                    <div class="card card-body">
+                        {% for subsite in site.subsite_set.all %}
+                            <a href="{{ subsite.get_absolute_url }}">{{ subsite.name }}</a>{% if subsite.main_location %}- Main Location{% endif %}<br>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+
+            {# Right Column #}
+            <div class="col-4">
+                <h1>Leadership</h1>
+            </div>
+        </div>
     </div>
 
 {% endblock %}
